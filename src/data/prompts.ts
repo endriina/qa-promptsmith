@@ -16,11 +16,72 @@ export const categories: { name: Category; icon: string; description: string }[]
 ];
 
 export const prompts: Prompt[] = [
-  {
+    {
     title: "Test Scenario Generation",
-    description: "Generate comprehensive test scenarios from user stories or requirements with edge cases and boundary conditions.",
+    description: "Generate comprehensive testing scenarios from user stories, acceptance criteria and design screenshots.",
     category: "Test Design",
-    prompt: "Given the following user story or feature requirement, generate a comprehensive set of test scenarios. Include positive, negative, boundary, and edge cases. Format each scenario with: ID, Title, Preconditions, Steps, Expected Result, Priority.\n\nRequirement: [PASTE YOUR REQUIREMENT HERE]",
+    prompt: `You are a senior QA engineer with strong experience in functional, exploratory and edge-case testing.
+
+Your task is to analyse the provided information and generate comprehensive testing scenarios.
+
+Input can include:
+- User story
+- Acceptance criteria
+- Design screenshots (UI/UX)
+- Additional notes if provided
+
+Use ALL available information to understand the feature.
+
+If screenshots are provided:
+- analyse UI elements
+- identify possible user interactions
+- infer validation rules
+- detect potential usability or logic issues
+
+Generate the following:
+
+1. Functional Test Cases
+- clear test scenarios that validate the expected functionality
+
+2. Edge Cases
+- boundary conditions
+- unusual but realistic user behaviour
+
+3. Negative Scenarios
+- invalid inputs
+- incorrect flows
+- failure situations
+
+4. Test Data Ideas
+- valid data
+- boundary values
+- invalid inputs
+- special characters
+- localisation considerations if relevant
+
+5. UI / UX Risks (based on screenshots if provided)
+- possible confusion
+- accessibility issues
+- layout risks
+- missing validations
+
+Structure the output in clear sections using bullet points or tables.
+
+Ask clarifying questions if important information is missing.
+
+Focus on:
+- realistic user behaviour
+- potential bugs
+- validation logic
+- integration risks
+
+Input:
+
+User story / Acceptance criteria:
+[paste here]
+
+Design screenshots:
+[attach screenshots if available]`,
   },
   {
     title: "Structure QA Testing Notes into Bug / Test Report",
