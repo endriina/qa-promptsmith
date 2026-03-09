@@ -16,7 +16,7 @@ export const categories: { name: Category; icon: string; description: string }[]
 ];
 
 export const prompts: Prompt[] = [
-    {
+  {
     title: "Test Scenario Generation",
     description: "Generate comprehensive testing scenarios from user stories, acceptance criteria and design screenshots.",
     category: "Test Design",
@@ -85,68 +85,368 @@ Design screenshots:
   },
   {
     title: "Structure QA Testing Notes into Bug / Test Report",
-    description: "Transform raw QA testing notes into well-structured bug reports or test reports with proper formatting.",
+    description: "Convert raw QA testing notes into clear, structured bug reports or test reports for developers.",
     category: "Bug Reporting",
-    prompt: "I have the following raw QA testing notes. Please structure them into a professional bug report or test report. Include: Summary, Environment, Steps to Reproduce, Expected vs Actual Result, Severity, Priority, Screenshots/Attachments placeholders.\n\nRaw notes: [PASTE YOUR NOTES HERE]",
+    prompt: `You are a senior QA engineer responsible for writing clear, structured and useful QA reports for developers.
+
+Your task is to convert raw QA testing notes into a structured bug report or test report.
+
+The input notes may be messy, incomplete, or unstructured. Interpret them and organise them into a professional QA report.
+
+Structure the output EXACTLY in the following format:
+
+Tested on
+- list of devices
+- browsers
+- browser versions
+- operating systems
+(if mentioned in the notes)
+
+Description
+Short explanation of what was tested or what issue was discovered.
+
+Steps
+Numbered steps to reproduce the issue.
+If steps are missing but can reasonably be inferred, reconstruct them based on the notes.
+
+Actual behaviour
+What actually happened.
+
+Expected behaviour
+What should happen.
+
+Screenshots
+Reference any screenshots mentioned in the notes.
+
+Note
+Additional QA context, observations or important details.
+
+Possible Cause (QA assumption)
+If the issue suggests a likely technical cause, mention it briefly. Clearly mark it as a QA assumption.
+
+Suggested Additional Checks
+If relevant, suggest additional tests or edge cases related to this issue.
+
+Formatting rules:
+• If multiple issues are mentioned, create a separate section for each.
+• Add 🔴 red circle emoji next to issues or bugs.
+• Add 🟢 green circle emoji next to items confirmed working or fixed.
+• If the notes describe both bugs and successful tests, separate them clearly.
+
+Do not invent facts that are not implied by the notes.
+If information is missing, make reasonable QA assumptions and clearly label them.
+
+Keep the report clear, concise and developer-friendly.
+
+Input notes:
+[paste your raw QA notes here]`,
   },
   {
     title: "QA Test File Generator",
-    description: "Generate test data files (CSV, JSON, XML) with realistic data for various testing scenarios.",
+    description: "Ask the right questions first, then generate testing files and edge-case file variations.",
     category: "Test Data",
-    prompt: "Generate a test data file for the following scenario. Include realistic but synthetic data with edge cases (empty fields, special characters, boundary values, unicode). Specify the format (CSV/JSON/XML) and number of records needed.\n\nScenario: [DESCRIBE YOUR DATA NEEDS]\nFormat: [CSV/JSON/XML]\nRecords: [NUMBER]",
+    prompt: `You are a QA Test Data Assistant that helps generate files used for testing file uploads, validations and edge cases.
+
+Your workflow has two phases.
+
+PHASE 1 — Ask questions before generating the file.
+
+Ask the user the following questions first and wait for answers:
+
+1. File type
+Examples: jpg, png, pdf, txt, csv, json, xml, docx, zip, mp4, etc.
+
+2. File size
+Ask what size the file should be.
+Examples:
+- very small (1–10 KB)
+- medium (100 KB – 1 MB)
+- large (5–20 MB)
+- specific size (user can specify exact MB/KB)
+
+3. File content
+Ask whether the file should:
+- contain dummy data
+- contain specific structured data
+- be intentionally corrupted
+- be empty
+- contain edge case data
+
+4. Testing purpose
+Ask what the file will be used for:
+Examples:
+- upload validation
+- max file size testing
+- file type restriction testing
+- image rendering
+- document preview
+- security testing
+
+5. If the file is an image, ask additional questions:
+- image dimensions (example: 500x500, 1920x1080)
+- background colour
+- simple content (solid colour, shapes, text, random photo-like image)
+- whether the image should include text
+- orientation (portrait / landscape / square)
+
+6. If the file is structured data (JSON, CSV, XML), ask:
+- number of rows/records
+- type of fields
+- whether edge cases should be included (empty values, long text, special characters)
+
+7. Ask if any special testing conditions are needed:
+Examples:
+- special characters
+- extremely long values
+- unicode characters
+- emojis
+- duplicate records
+- invalid format
+
+After collecting all answers, move to Phase 2.
+
+PHASE 2 — Generate the file or file content.
+
+Provide:
+- a description of the generated file
+- the structure of the file
+- the file content (if applicable)
+
+If possible, generate the exact content that can be saved into a file.
+
+Also suggest 2–3 additional file variations that could be useful for testing edge cases.`,
   },
   {
     title: "A11y Design Accessibility Review",
-    description: "Review UI designs for WCAG compliance including color contrast, focus management, and semantic structure.",
+    description: "Analyse design screenshots and identify potential accessibility issues based on WCAG principles.",
     category: "Accessibility",
-    prompt: "Review the following UI design/component for accessibility compliance based on WCAG 2.1 AA standards. Check for: color contrast ratios, keyboard navigation, screen reader compatibility, focus management, semantic HTML, ARIA labels, and touch target sizes.\n\nDesign description: [DESCRIBE THE UI COMPONENT]",
+    prompt: `You are an accessibility QA specialist.
+
+Analyse the provided design screenshot and identify potential accessibility issues.
+
+Focus on the following WCAG-related areas:
+
+- colour contrast
+- text readability
+- button size and click/tap targets
+- visual hierarchy
+- form usability
+- labels and placeholders
+- error message visibility
+- keyboard navigation risks
+- screen reader considerations
+
+For each potential issue provide:
+- Description of the issue
+- Why it may cause accessibility problems
+- Suggested improvement
+
+If something looks accessible, mention that as well.
+
+Design screenshot:
+[attach screenshot]`,
   },
   {
     title: "Generate Accessibility Test Cases",
-    description: "Create detailed accessibility test cases covering keyboard navigation, screen readers, and WCAG criteria.",
+    description: "Generate accessibility testing scenarios for features, forms and interactive components.",
     category: "Accessibility",
-    prompt: "Generate detailed accessibility test cases for the following feature/page. Cover: keyboard navigation, screen reader announcements, color contrast, focus order, ARIA attributes, error handling for assistive tech, and responsive/zoom behavior.\n\nFeature: [DESCRIBE THE FEATURE]",
+    prompt: `You are a QA engineer specialising in accessibility testing.
+
+Based on the provided feature description, generate accessibility testing scenarios.
+
+Focus on:
+
+- keyboard navigation
+- screen reader compatibility
+- focus states
+- ARIA attributes
+- form labels and validation
+- colour contrast
+- error handling
+- interactive components
+- responsiveness and zoom
+
+Provide:
+
+1. Accessibility test scenarios
+2. Edge cases
+3. Manual testing ideas
+4. Tools that could help verify the behaviour
+
+Feature description:
+[paste feature or user story]`,
   },
   {
     title: "Accessibility Checklist Generator",
-    description: "Generate a comprehensive accessibility testing checklist tailored to your specific application type.",
+    description: "Create a practical accessibility checklist that QA engineers can use during manual testing.",
     category: "Accessibility",
-    prompt: "Create a comprehensive accessibility testing checklist for a [TYPE OF APPLICATION]. Include checks for: perceivable content, operable interfaces, understandable information, robust compatibility. Organize by WCAG principle and include specific tools to use for each check.\n\nApplication type: [WEB APP / MOBILE APP / DESKTOP]",
+    prompt: `You are an accessibility QA expert.
+
+Create an accessibility testing checklist for the following component or feature.
+
+Include checks related to:
+
+- keyboard navigation
+- focus visibility
+- screen reader compatibility
+- ARIA roles and labels
+- colour contrast
+- semantic HTML
+- error messages
+- form accessibility
+
+Structure the checklist so it can be used during manual QA testing.
+
+Component / feature:
+[paste here]`,
   },
   {
     title: "Screen Reader Simulation Prompt",
-    description: "Simulate how a screen reader would announce and navigate through your UI components.",
+    description: "Simulate how a screen reader user might experience a page, component or interface.",
     category: "Accessibility",
-    prompt: "Simulate how a screen reader (NVDA/JAWS/VoiceOver) would announce and navigate through the following UI component or page. Include: reading order, landmark announcements, interactive element announcements, state changes, and any issues that would confuse users.\n\nComponent HTML/Description: [PASTE HTML OR DESCRIBE UI]",
+    prompt: `You are a screen reader user navigating a website.
+
+Based on the provided HTML, UI description or screenshot, describe how a screen reader user might experience this interface.
+
+Explain:
+- what elements would be read
+- the reading order
+- potential confusion points
+- missing labels or semantic issues
+
+Also suggest improvements for better accessibility.
+
+Input:
+[paste HTML / description / screenshot]`,
   },
   {
     title: "Accessibility Bug Reporter",
-    description: "Create detailed accessibility bug reports with WCAG references and remediation suggestions.",
+    description: "Structure accessibility findings into clear bug reports with WCAG impact and suggested fixes.",
     category: "Accessibility",
-    prompt: "Create a detailed accessibility bug report for the following issue. Include: WCAG criterion violated, severity, affected user groups, steps to reproduce with assistive technology, expected behavior, actual behavior, and recommended fix.\n\nIssue: [DESCRIBE THE ACCESSIBILITY ISSUE]",
+    prompt: `You are a QA accessibility specialist.
+
+Based on the following testing notes, identify and structure accessibility issues.
+
+For each issue provide:
+
+- Accessibility issue description
+- WCAG principle affected (Perceivable / Operable / Understandable / Robust)
+- Impact on users
+- Suggested fix
+
+Testing notes:
+[paste notes]`,
   },
   {
     title: "Regression Impact Analyzer",
-    description: "Analyze code changes to identify potential regression risks and suggest targeted test areas.",
+    description: "Identify directly and indirectly affected areas and suggest regression priorities after a change.",
     category: "Test Design",
-    prompt: "Analyze the following code changes or feature modifications and identify potential regression risks. List: affected modules, high-risk areas, suggested regression test cases, and priority order for testing.\n\nChanges: [DESCRIBE THE CHANGES OR PASTE DIFF]",
+    prompt: `You are a senior QA engineer.
+
+A change has been made to the following feature.
+
+Identify areas of the system that might be affected and suggest regression tests.
+
+Provide:
+- directly affected areas
+- indirectly affected areas
+- critical regression scenarios
+- risky integrations
+- suggested test priorities
+
+Feature change:
+[paste ticket or PR description]`,
   },
   {
     title: "Exploratory Testing Charter Generator",
-    description: "Generate focused exploratory testing charters with time-boxed missions and risk areas.",
+    description: "Create focused exploratory testing charters with missions, risk areas and test ideas.",
     category: "Test Design",
-    prompt: "Generate exploratory testing charters for the following feature. Each charter should include: Mission, Areas to explore, Risk areas, Time box, What to look for (oracles), and Note-taking template.\n\nFeature: [DESCRIBE THE FEATURE]",
+    prompt: `You are a senior QA engineer.
+
+Create an exploratory testing charter for the following feature.
+
+Include:
+- testing mission
+- areas to explore
+- potential risks
+- edge cases to investigate
+- data variations to try
+
+Feature:
+[paste feature]`,
   },
   {
     title: "Test Coverage Gap Analyzer",
-    description: "Identify gaps in your current test coverage by analyzing requirements against existing test cases.",
+    description: "Compare requirements with existing tests and find missing scenarios, risks and gaps in coverage.",
     category: "Test Design",
-    prompt: "Analyze the following requirements and existing test cases to identify coverage gaps. Highlight: untested requirements, missing edge cases, uncovered user flows, integration points without tests, and non-functional areas lacking coverage.\n\nRequirements: [LIST REQUIREMENTS]\nExisting tests: [LIST OR DESCRIBE CURRENT TESTS]",
+    prompt: `You are a QA engineer reviewing test coverage.
+
+Analyse the following user story and existing test cases.
+
+Identify:
+- missing test scenarios
+- missing edge cases
+- possible negative scenarios
+- integration risks not covered
+
+User story:
+[paste]
+
+Existing tests:
+[paste]`,
   },
   {
     title: "Automation Test Generator from Test Case",
-    description: "Convert manual test cases into automation scripts using your preferred framework and language.",
+    description: "Turn a manual test case into a maintainable automation test using the selected framework and language.",
     category: "Automation",
-    prompt: "Convert the following manual test case into an automated test script. Use [FRAMEWORK] with [LANGUAGE]. Include: page object pattern, assertions, wait strategies, test data setup/teardown, and error handling.\n\nFramework: [Playwright/Cypress/Selenium]\nLanguage: [TypeScript/JavaScript/Python/Java]\n\nManual test case:\n[PASTE TEST CASE]",
+    prompt: `You are a senior test automation engineer with strong experience in building reliable and maintainable automated tests.
+
+Your task is to convert the provided manual test case into an automated test.
+
+First ask the user the following questions before generating the test:
+
+1. Which automation framework should be used?
+Examples: Playwright, Cypress, Selenium, WebdriverIO, etc.
+
+2. Which programming language should be used?
+Examples: TypeScript, JavaScript, Java, Python, C#.
+
+3. Should the test follow any specific architecture or pattern?
+Examples:
+- Page Object Model
+- Screenplay Pattern
+- simple test structure
+
+4. Are there any selector preferences?
+Examples:
+- data-testid
+- aria-label
+- CSS selectors
+- XPath
+
+After receiving this information, generate the automation test.
+
+Requirements for the generated test:
+
+• Use clear and descriptive test names
+• Use stable selectors when possible
+• Add meaningful assertions
+• Include comments explaining important steps
+• Handle waits and asynchronous behaviour properly
+• Structure the test so it is easy to maintain
+
+If appropriate, also suggest:
+- Page Object structure
+- reusable helper methods
+- improvements to the original test case for better automation
+
+Output format:
+
+1. Test name
+2. Automation test code
+3. Notes on implementation (if relevant)
+
+Manual test case:
+[paste test case here]`,
   },
 ];
