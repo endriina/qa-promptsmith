@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import CategoriesSection from "@/components/CategoriesSection";
 import PromptsSection from "@/components/PromptsSection";
+import CustomPromptBuilder from "@/components/CustomPromptBuilder";
 import type { Category } from "@/data/prompts";
 
 const Index = () => {
@@ -14,6 +15,7 @@ const Index = () => {
       <HeroSection />
       <CategoriesSection activeCategory={activeCategory} onSelect={setActiveCategory} />
       <PromptsSection activeCategory={activeCategory} />
+      <CustomPromptBuilder />
       <footer className="border-t py-8">
         <div className="container text-center font-display text-xs text-muted-foreground">
           QA AI Prompt Library — Built for QA engineers
